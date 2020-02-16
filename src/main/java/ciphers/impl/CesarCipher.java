@@ -1,29 +1,21 @@
 package ciphers.impl;
 
+
 import ciphers.Cipher;
 
 public class CesarCipher implements Cipher {
     @Override
     public String encode(String textToEncode) {
-        return encodeOrDecode(textToEncode, true);
-    }
-
-    @Override
-    public String decode(String textToDecode) {
-        return encodeOrDecode(textToDecode, false);
-    }
-
-    public String encodeOrDecode(String textToEncode, boolean isEncoding) {
-        char[] lettersInMamaWord = textToEncode.toCharArray();
+        char[] textToEncodeInCharArray = textToEncode.toCharArray();
         StringBuilder stringBuilder = new StringBuilder();
-        for (char sign : lettersInMamaWord) {
+        for (char sign : textToEncodeInCharArray) {
             if (Character.isAlphabetic(sign)) {
                 boolean isUpperCase = Character.isUpperCase(sign);
                 char codedLetter = Character.toUpperCase(sign);
-                if (isEncoding) {
-                    codedLetter = encode(codedLetter);
+                if (codedLetter < 88) {
+                    codedLetter = (char) (codedLetter + 3);
                 } else {
-                    codedLetter = decodeSign(codedLetter);
+                    codedLetter = (char) (codedLetter - 23);
                 }
                 if (!isUpperCase) {
                     codedLetter = Character.toLowerCase(codedLetter);
@@ -36,30 +28,27 @@ public class CesarCipher implements Cipher {
         return stringBuilder.toString();
     }
 
-    private char decodeSign(char codedLetter) {
-        if (codedLetter == 65) {
-            codedLetter = 'X';
-        } else if (codedLetter == 66) {
-            codedLetter = 'Y';
-        } else if (codedLetter == 67) {
-            codedLetter = 'Z';
-        } else {
-            codedLetter = (char) (codedLetter - 3);
+    @Override
+    public String decode(String textToDecode) {
+        char[] textToDecodeInCharArray = textToDecode.toCharArray();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (char sign : textToDecodeInCharArray) {
+            if (Character.isAlphabetic(sign)) {
+                boolean isUpperCase = Character.isUpperCase(sign);
+                char codedLetter = Character.toUpperCase(sign);
+                if (codedLetter > 67) {
+                    codedLetter = (char) (codedLetter - 3);
+                } else {
+                    codedLetter = (char) (codedLetter + 23);
+                }
+                if (!isUpperCase) {
+                    codedLetter = Character.toLowerCase(codedLetter);
+                }
+                stringBuilder.append(codedLetter);
+            } else {
+                stringBuilder.append(sign);
+            }
         }
-        return codedLetter;
-    }
-
-    private char encode(char letterToEncode) {
-        if (letterToEncode == 88) {
-            letterToEncode = 'A';
-        } else if (letterToEncode == 89) {
-            letterToEncode = 'B';
-        } else if (letterToEncode == 90) {
-            letterToEncode = 'C';
-        } else {
-            letterToEncode = (char) (letterToEncode + 3);
-        }
-        return letterToEncode;
+        return stringBuilder.toString();
     }
 }
-

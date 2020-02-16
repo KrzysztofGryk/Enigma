@@ -1,20 +1,26 @@
-import ciphers.impl.CesarCipher;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class Test {
-    public static void main(String[] args) {
+public class Test extends Application {
+    String resourcePath = "/fxml/Test.fxml";
 
-        String mama = "mama";
-        char[] lettersInMamaWord = mama.toCharArray();
-        for (char letter : lettersInMamaWord) {
-            int newLetterNumber = letter + 3;
-            System.out.print((char) newLetterNumber);
-        }
-        System.out.println();
-        CesarCipher text = new CesarCipher();
-        System.out.println(text.encode("ABCabc123XYZxyz"));
-        System.out.println(text.decode("ABCabc123XYZxyz"));
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource(resourcePath));
+        Parent root = loader.load();
+        Scene scene = new Scene(root, 600, 400);
+        primaryStage.setTitle("Enigma");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
-}
+
+
+
+
+    }
 
 
 

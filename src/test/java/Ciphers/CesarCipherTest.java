@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+
 public class CesarCipherTest {
     protected final String textWithNoAlphabeticLetters = "112312[]][";
     protected final String textWithAlphabeticLetters = "abcdd";
@@ -35,25 +36,25 @@ public class CesarCipherTest {
         Assertions.assertEquals(expectedTextForMixedLettersText, encode);
     }
 
-        @DisplayName("Testing correction of decoding text with no alphabetic letters")
-        @Test
-        public void decodeTestOnlyAlphabeticLettersAreEncoded() {
-            String decode = cesarCipher.decode(textWithNoAlphabeticLetters);
-            Assertions.assertEquals(textWithNoAlphabeticLetters, decode);
-        }
+    @DisplayName("Testing correction of decoding text with no alphabetic letters")
+    @Test
+    public void decodeTestOnlyAlphabeticLettersAreEncoded() {
+        String decode = cesarCipher.decode(textWithNoAlphabeticLetters);
+        Assertions.assertEquals(textWithNoAlphabeticLetters, decode);
+    }
 
-        @DisplayName("Test Text decoding  With Alphabetic Letters")
-        @Test
-        public void decodeTestTextWithAlphabeticLetters() {
-            String decode = cesarCipher.decode(expectedTextForAlphabeticLetters);
-            Assertions.assertEquals(textWithAlphabeticLetters, decode);
-        }
+    @DisplayName("Test Text decoding  With Alphabetic Letters")
+    @Test
+    public void decodeTestTextWithAlphabeticLetters() {
+        String decode = cesarCipher.decode(expectedTextForAlphabeticLetters);
+        Assertions.assertEquals(textWithAlphabeticLetters, decode);
+    }
 
-        @DisplayName("Test ExpectedText decoding For Alphabetic Letters")
-        @Test
-        public void decodeTestExpectedTextForAlphabeticLetters() {
-            String decode = cesarCipher.decode(expectedTextForMixedLettersText);
-            Assertions.assertEquals(mixedText, decode);
+    @DisplayName("Test ExpectedText decoding For Alphabetic Letters")
+    @Test
+    public void decodeTestExpectedTextForAlphabeticLetters() {
+        String decode = cesarCipher.decode(expectedTextForMixedLettersText);
+        Assertions.assertEquals(mixedText, decode);
     }
 
 
