@@ -30,6 +30,8 @@ public class FileTool {
 
         }
     }
-
+public static void gfdswf (String kkjuy){
+    System.out.println(" gfdds");
+}
 }
 

@@ -2,30 +2,46 @@ package controllers;
 
 import application.Main;
 import ciphers.Cipher;
-import ciphers.impl.CesarCipher;
+import ciphers.impl.VigenereCipher;
+import factories.CipherFactory;
+import factories.impl.CipherFactoryImpl;
 import file.utils.FileTool;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class MainController implements Initializable {
-    private Stage mainStage;
+import static factories.impl.CipherFactoryImpl.*;
 
+public class MainController implements Initializable {
+    @FXML
+    TextArea inputTextArea;
+
+    @FXML
+    ChoiceBox<String> cipherChoiceBox;
+
+    private Stage mainStage;
+    private ObservableList<String> possibleCipherMethods = FXCollections.observableArrayList(Arrays.asList(CEZAR, ROOT13, VIGENERE));
+    private CipherFactory cipherFactory = new CipherFactoryImpl();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        cipherChoiceBox.setItems(possibleCipherMethods);
+        cipherChoiceBox.setValue(CEZAR);
         mainStage = Main.getMainStage();
-        System.out.println(mainStage==null);
+        System.out.println(mainStage == null);
     }
-
-    @FXML
-    TextArea inputTextArea;
 
 
     public TextArea getInputTextArea() {
@@ -40,8 +56,19 @@ public class MainController implements Initializable {
     public void triggerEncoding() {
         String userText = inputTextArea.getText();
         if (!userText.isEmpty()) {
-            Cipher cesarCipher = new CesarCipher();
-            String encode = cesarCipher.encode(userText);
+            String cipherType = cipherChoiceBox.getValue();
+            Cipher cipher = cipherFactory.create(cipherType);
+            if (cipher instanceof VigenereCipher) {
+                TextInputDialog inputDialog = new TextInputDialog("Key");
+                inputDialog.setHeaderText("Please choose key and remember it.");
+                inputDialog.setContentText("Key: ");
+                Optional<String> userInputOptional = inputDialog.showAndWait();
+                if (userInputOptional.isPresent() && !userInputOptional.get().equals("")) {
+                    ((VigenereCipher) cipher).setKey(userInputOptional.get());
+                } else
+                    return;
+            }
+            String encode = cipher.encode(userText);
             inputTextArea.setText(encode);
         }
     }
@@ -50,8 +77,19 @@ public class MainController implements Initializable {
     public void triggerDecoding() {
         String userText = inputTextArea.getText();
         if (!userText.isEmpty()) {
-            Cipher cesarCipher = new CesarCipher();
-            String decode = cesarCipher.decode(userText);
+            String cipherType = cipherChoiceBox.getValue();
+            Cipher cipher = cipherFactory.create(cipherType);
+            if (cipher instanceof VigenereCipher) {
+                TextInputDialog inputDialog = new TextInputDialog("Key");
+                inputDialog.setHeaderText("If you know the key, write it here.");
+                inputDialog.setContentText("Key: ");
+                Optional<String> userInputOptional = inputDialog.showAndWait();
+                if (userInputOptional.isPresent() && !userInputOptional.get().equals("")) {
+                    ((VigenereCipher) cipher).setKey(userInputOptional.get());
+                } else
+                    return;
+            }
+            String decode = cipher.decode(userText);
             inputTextArea.setText(decode);
         }
 
